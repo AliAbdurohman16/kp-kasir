@@ -67,6 +67,8 @@
         dateFormat: "Y-m-d H:i",
         placeholder: "yyyy-mm-dd --:--",
         time_24hr: true,
+        defaultHour: 8,
+        defaultMinute: 0,
         locale: {
             firstDayOfWeek: 1,
             weekdays: {
@@ -85,6 +87,8 @@
         dateFormat: "Y-m-d H:i",
         placeholder: "yyyy-mm-dd --:--",
         time_24hr: true,
+        defaultHour: 8,
+        defaultMinute: 0,
         locale: {
             firstDayOfWeek: 1,
             weekdays: {
