@@ -123,7 +123,7 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
         $sheet->getColumnDimension('B')->setWidth(20);
         $sheet->getColumnDimension('C')->setWidth(30);
         $sheet->getColumnDimension('D')->setWidth(15);
-        $sheet->getColumnDimension('E')->setWidth(30);
+        $sheet->getColumnDimension('E')->setWidth(20);
 
         $highestRow = $sheet->getHighestRow();
 
@@ -139,6 +139,15 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     'color' => ['argb' => 'FF000000'],
                 ],
+            ],
+        ]);
+
+        // NO Text Center
+        $sheet->getStyle('A5:A' . $highestRow)->applyFromArray([
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'wrapText' => true,
             ],
         ]);
         
@@ -157,6 +166,15 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                     'color' => ['argb' => 'FF000000'],
                 ],
+            ],
+        ]);
+
+        // Format Total Text Right
+        $sheet->getStyle('E5:E' . ($highestRow + 1))->applyFromArray([
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'wrapText' => true,
             ],
         ]);
 
