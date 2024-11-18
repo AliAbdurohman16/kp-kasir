@@ -122,7 +122,7 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
         $sheet->getColumnDimension('A')->setWidth(5);
         $sheet->getColumnDimension('B')->setWidth(20);
         $sheet->getColumnDimension('C')->setWidth(30);
-        $sheet->getColumnDimension('D')->setWidth(30);
+        $sheet->getColumnDimension('D')->setWidth(15);
         $sheet->getColumnDimension('E')->setWidth(30);
 
         $highestRow = $sheet->getHighestRow();
@@ -141,11 +141,13 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
                 ],
             ],
         ]);
-
-        $sheet->getStyle('A5:A' . $highestRow)->applyFromArray([
+        
+        // QTY Text Center
+        $sheet->getStyle('D5:D' . $highestRow)->applyFromArray([
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'wrapText' => true,
             ],
         ]);
 
