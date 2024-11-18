@@ -35,7 +35,7 @@ class ReportController extends Controller
             'end_date' => 'required',
         ]);
 
-        return Excel::download(new ExportReport($request->start_date, $request->end_date), 'laporan-transaksi.xlsx');
+        return Excel::download(new ExportReport($request->start_date, $request->end_date), 'laporan-penjualan.xlsx');
     }
 
     /**
