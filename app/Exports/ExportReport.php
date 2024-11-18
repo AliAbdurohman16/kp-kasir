@@ -147,7 +147,6 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-                'wrapText' => true,
             ],
         ]);
         
@@ -156,7 +155,6 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-                'wrapText' => true,
             ],
         ]);
 
@@ -174,7 +172,6 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-                'wrapText' => true,
             ],
         ]);
 
