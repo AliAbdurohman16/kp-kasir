@@ -23,9 +23,11 @@
 </div>
 
 <div class="card basic-data-table">
+    @if (request()->is('products'))
     <div class="card-header">
         <a href="{{ route('products.create') }}" class="btn btn-primary mb-2">Tambah Data</a>
     </div>
+    @endif
     <div class="card-body">
         <div class="table-responsive">
             <table id="product" class="table">
@@ -51,7 +53,9 @@
                         <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                         <td>
                             <a href="{{ route('products.edit', $product) }}" class="btn btn-success mb-2"><iconify-icon icon="ic:outline-edit"></iconify-icon></a>
+                            @if (request()->is('products'))
                             <span class="btn btn-danger btn-delete" data-id="{{ $product->id }}"><iconify-icon icon="tabler:trash"></iconify-icon></span>
+                            @endif
                         </td>
                     </tr>
                     @endforeach

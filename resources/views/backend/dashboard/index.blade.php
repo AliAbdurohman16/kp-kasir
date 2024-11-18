@@ -24,7 +24,7 @@
     <div class="col-xxl-12">
         <div class="row gy-4">
 
-            @if (Auth::user()->hasRole('kepala-toko'))
+            @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('kepala-toko'))
             <div class="col-xxl-4 col-sm-6">
                 <div class="card p-3 shadow-2 radius-8 border input-form-light h-100 bg-gradient-end-1">
                     <div class="card-body p-0">
@@ -51,10 +51,29 @@
 
                             <div class="d-flex align-items-center gap-2">
                                 <span class="mb-0 w-48-px h-48-px bg-primary-600 flex-shrink-0 text-white d-flex justify-content-center align-items-center rounded-circle h6 mb-0">
+                                    <iconify-icon icon="ep:select" class="icon"></iconify-icon>
+                                </span>
+                                <div>
+                                    <span class="mb-2 fw-medium text-secondary-light text-sm">Stok Produk Masih Ada</span>
+                                    <h6 class="fw-semibold">{{ $safe_stock }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xxl-4 col-sm-6">
+                <div class="card p-3 shadow-2 radius-8 border input-form-light h-100 bg-gradient-end-1">
+                    <div class="card-body p-0">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-1 mb-8">
+
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="mb-0 w-48-px h-48-px bg-primary-600 flex-shrink-0 text-white d-flex justify-content-center align-items-center rounded-circle h6 mb-0">
                                     <iconify-icon icon="mdi:times" class="icon"></iconify-icon>
                                 </span>
                                 <div>
-                                    <span class="mb-2 fw-medium text-secondary-light text-sm">Produk Stok Habis</span>
+                                    <span class="mb-2 fw-medium text-secondary-light text-sm">Stok Produk Habis</span>
                                     <h6 class="fw-semibold">{{ $out_of_stock }}</h6>
                                 </div>
                             </div>

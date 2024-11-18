@@ -18,6 +18,20 @@ class ProductController extends Controller
         return view('backend.product.index', $data);
     }
 
+    public function safeStock()
+    {
+        $data['products'] = Product::whereNot('stock', 0)->orderBy('created_at', 'desc')->get();
+
+        return view('backend.product.index', $data);
+    }
+
+    public function outOfStock()
+    {
+        $data['products'] = Product::where('stock', 0)->orderBy('created_at', 'desc')->get();
+
+        return view('backend.product.index', $data);
+    }
+
     public function create()
     {
         return view('backend.product.create');

@@ -21,6 +21,8 @@ Route::middleware('auth')->group(function () {
 
     Route::group(['middleware' => ['user-access:owner,kepala-toko']], function () {
         Route::resource('products', Backend\ProductController::class);
+        Route::get('product/safe-stock', [Backend\ProductController::class, 'safeStock'])->name('safe-stock');
+        Route::get('product/out-of-stock', [Backend\ProductController::class, 'outOfStock'])->name('out-of-stock');
     });
 
     Route::group(['middleware' => ['user-access:admin']], function () {

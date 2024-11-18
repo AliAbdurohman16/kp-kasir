@@ -34,11 +34,22 @@
             </li>
             @endif
             @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('kepala-toko'))
-            <li class="{{ request()->is('products*') ? 'active-page' : '' }}">
-                <a href="{{ route('products.index') }}">
+            <li class="dropdown {{ request()->is('products*') ? 'open' : '' }}">
+                <a href="javascript:void(0)">
                     <iconify-icon icon="solar:gallery-wide-linear" class="menu-icon"></iconify-icon>
                     <span>Produk</span>
                 </a>
+                <ul class="sidebar-submenu">
+                    <li>
+                        <a href="{{ route('products.index') }}"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> Semua Produk</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('safe-stock') }}"><i class="ri-circle-fill circle-icon text-success-main w-auto"></i> Stok Masih Ada</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('out-of-stock') }}"><i class="ri-circle-fill circle-icon text-danger-main w-auto"></i> Stok Habis</a>
+                    </li>
+                </ul>
             </li>
             @endif
             @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('admin'))

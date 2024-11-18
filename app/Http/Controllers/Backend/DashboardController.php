@@ -26,6 +26,7 @@ class DashboardController extends Controller
         $data = [
             'activities' => Activity::latest()->limit(10)->get(),
             'product' => Product::count(),
+            'safe_stock' => Product::whereNot('stock', 0)->count(),
             'out_of_stock' => Product::where('stock', 0)->count(),
             'daily_income' => Transaction::whereDate('created_at', Carbon::today())->sum('total'),
             'monthly_income' => Transaction::whereMonth('created_at', Carbon::now()->month)
