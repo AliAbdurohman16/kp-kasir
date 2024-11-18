@@ -38,16 +38,16 @@ class UserSeeder extends Seeder
             'password' => bcrypt('1234567890'),
         ])->assignRole('admin');
 
-        // cashier
-        $cashierAvatar = $this->createAvatar('Kasir');
+        // kepala-toko
+        $kepalaTokoAvatar = $this->createAvatar('Kepala Toko');
 
-        $cashier = User::create([
-            'avatar' => $cashierAvatar,
-            'name' => 'Kasir',
-            'email' => 'kasir@gmail.com',
+        $kepalaToko = User::create([
+            'avatar' => $kepalaTokoAvatar,
+            'name' => 'Kepala Toko',
+            'email' => 'kepalatoko@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('1234567890'),
-        ])->assignRole('kasir');
+        ])->assignRole('kepala-toko');
     }
 
     protected function createAvatar($name)

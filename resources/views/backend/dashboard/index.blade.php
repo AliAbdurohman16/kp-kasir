@@ -24,6 +24,7 @@
     <div class="col-xxl-12">
         <div class="row gy-4">
 
+            @if (Auth::user()->hasRole('kepala-toko'))
             <div class="col-xxl-4 col-sm-6">
                 <div class="card p-3 shadow-2 radius-8 border input-form-light h-100 bg-gradient-end-1">
                     <div class="card-body p-0">
@@ -31,7 +32,47 @@
 
                             <div class="d-flex align-items-center gap-2">
                                 <span class="mb-0 w-48-px h-48-px bg-primary-600 flex-shrink-0 text-white d-flex justify-content-center align-items-center rounded-circle h6 mb-0">
-                                    <iconify-icon icon="mingcute:user-follow-fill" class="icon"></iconify-icon>
+                                    <iconify-icon icon="solar:gallery-wide-linear" class="icon"></iconify-icon>
+                                </span>
+                                <div>
+                                    <span class="mb-2 fw-medium text-secondary-light text-sm">Semua Produk</span>
+                                    <h6 class="fw-semibold">{{ $product }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xxl-4 col-sm-6">
+                <div class="card p-3 shadow-2 radius-8 border input-form-light h-100 bg-gradient-end-1">
+                    <div class="card-body p-0">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-1 mb-8">
+
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="mb-0 w-48-px h-48-px bg-primary-600 flex-shrink-0 text-white d-flex justify-content-center align-items-center rounded-circle h6 mb-0">
+                                    <iconify-icon icon="mdi:times" class="icon"></iconify-icon>
+                                </span>
+                                <div>
+                                    <span class="mb-2 fw-medium text-secondary-light text-sm">Produk Stok Habis</span>
+                                    <h6 class="fw-semibold">{{ $out_of_stock }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('admin'))
+            <div class="col-xxl-4 col-sm-6">
+                <div class="card p-3 shadow-2 radius-8 border input-form-light h-100 bg-gradient-end-1">
+                    <div class="card-body p-0">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-1 mb-8">
+
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="mb-0 w-48-px h-48-px bg-primary-600 flex-shrink-0 text-white d-flex justify-content-center align-items-center rounded-circle h6 mb-0">
+                                    <iconify-icon icon="streamline:bag-dollar-solid" class="icon"></iconify-icon>
                                 </span>
                                 <div>
                                     <span class="mb-2 fw-medium text-secondary-light text-sm">Pendapatan Hari Ini</span>
@@ -42,7 +83,9 @@
                     </div>
                 </div>
             </div>
+            @endif
 
+            @if (Auth::user()->hasRole('owner'))
             <div class="col-xxl-4 col-sm-6">
                 <div class="card p-3 shadow-2 radius-8 border input-form-light h-100 bg-gradient-end-2">
                     <div class="card-body p-0">
@@ -50,7 +93,7 @@
 
                             <div class="d-flex align-items-center gap-2">
                                 <span class="mb-0 w-48-px h-48-px bg-success-main flex-shrink-0 text-white d-flex justify-content-center align-items-center rounded-circle h6">
-                                    <iconify-icon icon="mingcute:user-follow-fill" class="icon"></iconify-icon>
+                                    <iconify-icon icon="streamline:bag-dollar-solid" class="icon"></iconify-icon>
                                 </span>
                                 <div>
                                     <span class="mb-2 fw-medium text-secondary-light text-sm">Pendapatan Bulan Ini</span>
@@ -80,10 +123,12 @@
                     </div>
                 </div>
             </div>
+            @endif
 
         </div>
     </div>
 
+    @if (Auth::user()->hasRole('owner'))
     <!-- Chart Bar start -->
     <div class="col-xxl-12">
         <div class="card h-100 radius-8 border-0">
@@ -144,6 +189,7 @@
         </div>
     </div>
     <!-- Log Activity End -->
+    @endif
 </div>
 @endsection
 

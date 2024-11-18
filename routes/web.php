@@ -19,11 +19,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('employees', Backend\EmployeeController::class);
     });
 
-    Route::group(['middleware' => ['user-access:owner,admin']], function () {
+    Route::group(['middleware' => ['user-access:owner,kepala-toko']], function () {
         Route::resource('products', Backend\ProductController::class);
     });
 
-    Route::group(['middleware' => ['user-access:kasir']], function () {
+    Route::group(['middleware' => ['user-access:admin']], function () {
         Route::resource('cashier', Backend\CashierController::class);
         Route::post('cashier/select/{id}', [Backend\CashierController::class, 'select'])->name('select');
     });

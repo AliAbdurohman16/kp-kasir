@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
 use App\Models\Transaction;
 use Carbon\Carbon;
 
@@ -24,6 +25,8 @@ class DashboardController extends Controller
 
         $data = [
             'activities' => Activity::latest()->limit(10)->get(),
+            'product' => Product::count(),
+            'out_of_stock' => Product::where('stock', 0)->count(),
             'daily_income' => Transaction::whereDate('created_at', Carbon::today())->sum('total'),
             'monthly_income' => Transaction::whereMonth('created_at', Carbon::now()->month)
                                 ->whereYear('created_at', Carbon::now()->year)

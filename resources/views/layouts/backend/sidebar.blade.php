@@ -17,7 +17,7 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            @if (Auth::user()->hasRole('kasir'))
+            @if (Auth::user()->hasRole('admin'))
             <li class="{{ request()->is('cashier*') ? 'active-page' : '' }}">
                 <a href="{{ route('cashier.index') }}">
                     <iconify-icon icon="emojione-monotone:fax-machine" class="menu-icon"></iconify-icon>
@@ -33,7 +33,7 @@
                 </a>
             </li>
             @endif
-            @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('admin'))
+            @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('kepala-toko'))
             <li class="{{ request()->is('products*') ? 'active-page' : '' }}">
                 <a href="{{ route('products.index') }}">
                     <iconify-icon icon="solar:gallery-wide-linear" class="menu-icon"></iconify-icon>
@@ -41,6 +41,7 @@
                 </a>
             </li>
             @endif
+            @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('admin'))
             <li class="{{ request()->is('transactions') ? 'active-page' : '' }}">
                 <a href="{{ route('transactions') }}">
                     <iconify-icon icon="hugeicons:invoice-03" class="menu-icon"></iconify-icon>
@@ -53,6 +54,7 @@
                     <span>Laporan</span>
                 </a>
             </li>
+            @endif
             @if (Auth::user()->hasRole('owner'))
             <li class="{{ request()->is('employees*') ? 'active-page' : '' }}">
                 <a href="{{ route('employees.index') }}">
