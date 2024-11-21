@@ -1,6 +1,6 @@
 @extends('layouts.backend.main')
 
-@section('title', 'Data Paket')
+@section('title', 'Data Produk')
 
 @section('css')
 <link href="{{ asset('backend') }}/assets/css/lib/dataTables.min.css" rel="stylesheet" >

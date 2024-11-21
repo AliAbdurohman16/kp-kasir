@@ -11,8 +11,6 @@ Auth::routes(['register' => false, 'reset' => false]);
 
 Route::middleware('auth')->group(function () {
     Route::get('dashboard', [Backend\DashboardController::class, 'index'])->name('dashboard');
-    Route::get('transactions', [Backend\TransactionController::class, 'index'])->name('transactions');
-    Route::get('transactions/print/{id}', [Backend\TransactionController::class, 'print'])->name('transactions.print');
 
     Route::group(['middleware' => ['user-access:owner']], function () {
         Route::get('log-activities', [Backend\LogActivityController::class, 'index'])->name('log-activities');
@@ -23,6 +21,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('products', Backend\ProductController::class);
         Route::get('product/safe-stock', [Backend\ProductController::class, 'safeStock'])->name('safe-stock');
         Route::get('product/out-of-stock', [Backend\ProductController::class, 'outOfStock'])->name('out-of-stock');
+    });
+
+    Route::group(['middleware' => ['user-access:owner,admin']], function () {
+        Route::get('transactions', [Backend\TransactionController::class, 'index'])->name('transactions');
+        Route::get('transactions/print/{id}', [Backend\TransactionController::class, 'print'])->name('transactions.print');
     });
 
     Route::group(['middleware' => ['user-access:admin']], function () {

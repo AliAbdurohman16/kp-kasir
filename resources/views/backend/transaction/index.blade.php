@@ -43,7 +43,8 @@
                         <td>{{ \Carbon\Carbon::parse($transaction->created_at)->translatedFormat('d/m/Y H:i') }}</td>
                         <td>
                             @foreach ($transaction->Cart->CartDetails as $detail)
-                                {{ $detail->Product->name }} x {{ $detail->qty }} <br>
+                                {{ $detail->Product->name }} <br>
+                                {{ $detail->qty }} x {{ number_format($detail->Product->price, 0, ',', '.') }} <br>
                             @endforeach
                         </td>
                         <td>Rp {{ number_format($transaction->total, 0, ',', '.') }}</td>

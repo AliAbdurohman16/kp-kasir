@@ -1,6 +1,6 @@
 @extends('layouts.backend.main')
 
-@section('title', 'Edit Paket')
+@section('title', 'Edit Produk')
 
 @section('content')
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">

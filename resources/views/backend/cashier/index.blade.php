@@ -63,6 +63,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive mt-3" style="height: 258px !important; overflow-y: auto;">
+                    <input type="hidden" name="cart_id" value="{{ $cart->id ?? '' }}">
                     <table class="table striped-table mb-0" id="cart">
                         <thead>
                             <tr>
@@ -73,7 +74,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <input type="hidden" name="cart_id" value="{{ $cart->id ?? '' }}">
 
                             @if ($cart && $cart->CartDetails->count() > 0)
                                 @foreach ($cart->CartDetails as $detail)       
@@ -233,6 +233,7 @@
                     $("#cart tbody").html(newCartRows);
                     payInput.clear();
                     $("#changeMoney").text('Rp 0');
+                    $('input[name="cart_id"]').val(response.cart.id);
 
                     calculateTotal(response.cart.cart_details);
                 }
@@ -289,6 +290,7 @@
                         $("#cart tbody").html(newCartRows);
                         payInput.clear();
                         $("#changeMoney").text('Rp 0');
+                        $('input[name="cart_id"]').val(response.cart.id);
 
                         calculateTotal(response.cart.cart_details);
                     },
@@ -317,7 +319,7 @@
                 if (response.message) {
                     swal.fire({
                         icon: "success",
-                        title: "Gagal",
+                        title: "Berhasil",
                         text: response.message,
                     }).then((result) => {
                         if (result.isConfirmed) {
