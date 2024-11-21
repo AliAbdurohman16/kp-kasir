@@ -28,7 +28,6 @@
     <!-- jQuery UI js -->
     <script src="{{ asset('backend') }}/assets/js/lib/jquery-ui.min.js"></script>
 
-    <!-- main js -->
-    <script src="{{ asset('backend') }}/assets/js/app.js"></script>
+    @yield('js')
 </body>
 </html>
