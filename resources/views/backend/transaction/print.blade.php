@@ -123,7 +123,7 @@
     <div class="receipt">
         <div class="header">
             <p>Sinar Utama Furniture</p>
-            <p>Jl. Contoh Alamat No. 123</p>
+            <p>Jl. Raya Luragung - Kuningan Pusat Pertokoan Fajar</p>
             <p>Telp: (021) 12345678</p>
             <p>{{ date('d-m-Y H:i:s') }}</p>
         </div>

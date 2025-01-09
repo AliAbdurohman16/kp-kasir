@@ -51,7 +51,7 @@
                         <td>Rp {{ number_format($transaction->money, 0, ',', '.') }}</td>
                         <td>Rp {{ number_format($transaction->change_money, 0, ',', '.') }}</td>
                         <td class="text-center">
-                            <a href="{{ route('transactions.print', $transaction->id) }}" target="_blank" class="btn btn-primary"><iconify-icon icon="material-symbols:print-outline"></iconify-icon></a>
+                            <a href="{{ route('transactions.print', $transaction->id) }}" target="_blank" class="btn btn-primary"><iconify-icon icon="ic:outline-print"></iconify-icon></a>
                         </td>
                     </tr>
                     @endforeach

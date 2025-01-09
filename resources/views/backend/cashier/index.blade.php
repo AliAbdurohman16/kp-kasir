@@ -89,7 +89,7 @@
                                     <td>{{ $detail->qty }}</td>
                                     <td>Rp {{ number_format($detail->amount, 0, ',', '.') }}</td>
                                     <td class="text-center">
-                                        <span class="btn btn-sm btn-danger btn-delete" data-id="{{ $detail->id }}"><iconify-icon icon="mdi:times"></iconify-icon></span>
+                                        <span class="btn btn-sm btn-danger btn-delete" data-id="{{ $detail->id }}"><iconify-icon icon="ep:close-bold"></iconify-icon></span>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -224,7 +224,7 @@
                                 <td>${cart_detail.qty}</td>
                                 <td>Rp ${parseInt(formattedPrice).toLocaleString('id-ID')}</td>
                                 <td class="text-center">
-                                    <span class="btn btn-sm btn-danger btn-delete" data-id="${ cart_detail.id }"><iconify-icon icon="mdi:times"></iconify-icon></span>
+                                    <span class="btn btn-sm btn-danger btn-delete" data-id="${ cart_detail.id }"><iconify-icon icon="ep:close-bold"></iconify-icon></span>
                                 </td>
                             </tr>
                         `;
@@ -281,7 +281,7 @@
                                     <td>${cart_detail.qty}</td>
                                     <td>Rp ${parseInt(formattedPrice).toLocaleString('id-ID')}</td>
                                     <td class="text-center">
-                                        <span class="btn btn-sm btn-danger btn-delete" data-id="${ cart_detail.id }"><iconify-icon icon="mdi:times"></iconify-icon></span>
+                                        <span class="btn btn-sm btn-danger btn-delete" data-id="${ cart_detail.id }"><iconify-icon icon="ep:close-bold"></iconify-icon></span>
                                     </td>
                                 </tr>
                             `;
