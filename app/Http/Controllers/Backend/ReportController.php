@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Exports\ExportReport;
+use App\Models\Branch;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
@@ -14,7 +16,9 @@ class ReportController extends Controller
      */
     public function index()
     {
-        return view('backend.report.index');
+        $data['branches'] = Branch::orderBy('created_at', 'asc')->get();
+        
+        return view('backend.report.index', $data);
     }
 
     /**
@@ -30,12 +34,20 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
+        
         $request->validate([
             'start_date' => 'required',
             'end_date' => 'required',
+            'branch' => Auth::user()->hasRole('owner') ? 'required' : '',
         ]);
 
-        return Excel::download(new ExportReport($request->start_date, $request->end_date), 'laporan-penjualan.xlsx');
+        if (Auth::user()->hasRole('owner')) {
+            $branch = $request->branch;
+        } else {
+            $branch = Auth::user()->branch_id;
+        }
+        
+        return Excel::download(new ExportReport($request->start_date, $request->end_date, $branch), 'laporan-penjualan.xlsx');
     }
 
     /**

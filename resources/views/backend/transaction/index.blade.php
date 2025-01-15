@@ -28,8 +28,11 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Toko</th>
                         <th>Tanggal Bayar</th>
                         <th>Produk</th>
+                        <th>Subtotal</th>
+                        <th>Diskon</th>
                         <th>Total</th>
                         <th>Uang</th>
                         <th>Kembalian</th>
@@ -40,6 +43,7 @@
                     @foreach ($transactions as $transaction)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
+                        <td>{{ $transaction->Branch?->name }}</td>
                         <td>{{ \Carbon\Carbon::parse($transaction->created_at)->translatedFormat('d/m/Y H:i') }}</td>
                         <td>
                             @foreach ($transaction->Cart->CartDetails as $detail)
@@ -47,6 +51,8 @@
                                 {{ $detail->qty }} x {{ number_format($detail->Product->price, 0, ',', '.') }} <br>
                             @endforeach
                         </td>
+                        <td>Rp {{ number_format($transaction->subtotal, 0, ',', '.') }}</td>
+                        <td>{{ $transaction->Discount?->percentage ? 'Diskon ' . $transaction->Discount?->percentage . '% - ' . $transaction->Discount?->name  : '0%' }}</td>
                         <td>Rp {{ number_format($transaction->total, 0, ',', '.') }}</td>
                         <td>Rp {{ number_format($transaction->money, 0, ',', '.') }}</td>
                         <td>Rp {{ number_format($transaction->change_money, 0, ',', '.') }}</td>

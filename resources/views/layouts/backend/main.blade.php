@@ -17,7 +17,7 @@
 </head>
 <body>
 
-    <main class="dashboard-main">
+    <main class="dashboard-main {{ request()->is('cashier*') ? 'active' : '' }}">
         @include('layouts.backend.topbar')
             
         @include('layouts.backend.sidebar')

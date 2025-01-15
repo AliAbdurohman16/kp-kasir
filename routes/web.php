@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('products', Backend\ProductController::class);
         Route::get('product/safe-stock', [Backend\ProductController::class, 'safeStock'])->name('safe-stock');
         Route::get('product/out-of-stock', [Backend\ProductController::class, 'outOfStock'])->name('out-of-stock');
+        Route::get('product/{product}/print', [Backend\ProductController::class, 'print'])->name('products.print');
     });
 
     Route::group(['middleware' => ['user-access:owner,admin']], function () {
@@ -34,6 +35,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::resources([
+        'branches' => Backend\BranchController::class,
+        'discounts' => Backend\DiscountController::class,
         'carts' => Backend\CartController::class,
         'report' => Backend\ReportController::class,
         'profile' => Backend\ProfileController::class,

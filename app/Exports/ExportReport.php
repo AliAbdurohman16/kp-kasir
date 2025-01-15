@@ -15,25 +15,38 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
 {
     protected $startDate;
     protected $endDate;
+    protected $branch;
     protected $data;
     protected $totalSum = 0;
 
-    public function __construct($startDate, $endDate)
+    public function __construct($startDate, $endDate, $branch)
     {
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+        $this->branch = $branch;
         $this->data = collect();
     }
     
     public function collection()
     {
-        $this->data = Transaction::when($this->startDate, function ($query) {
-                            $query->where('created_at', '>=', $this->startDate);
-                        })
-                        ->when($this->endDate, function ($query) {
-                            $query->where('created_at', '<=', $this->endDate);
-                        })
-                        ->get();
+        if ($this->branch == 'Pilih Semua') {
+            $this->data = Transaction::when($this->startDate, function ($query) {
+                                $query->where('created_at', '>=', $this->startDate);
+                            })
+                            ->when($this->endDate, function ($query) {
+                                $query->where('created_at', '<=', $this->endDate);
+                            })
+                            ->get();
+        } else {
+            $this->data = Transaction::when($this->startDate, function ($query) {
+                                $query->where('created_at', '>=', $this->startDate);
+                            })
+                            ->when($this->endDate, function ($query) {
+                                $query->where('created_at', '<=', $this->endDate);
+                            })
+                            ->where('branch_id', $this->branch)
+                            ->get();
+        }
         
         return $this->data;
     }
@@ -44,7 +57,7 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
             ['Laporan Data'],
             ['Tanggal Export : ' . Carbon::now()->locale('id')->format('d-m-Y H:i:s')],
             [],
-            ['NO', 'Tanggal Transaksi', 'Produk', 'Qty', 'Total']
+            ['NO', 'Toko', 'Tanggal Transaksi', 'Produk', 'Qty', 'Subtotal', 'Diskon', 'Total']
         ];
     }
 
@@ -60,11 +73,14 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
 
         foreach ($row->Cart->CartDetails as $detail) {
             $data[] = [
-                'no'          => $no++,
-                'date'        => $date,
-                'product'     => $detail->Product->name,
-                'qty'         => $detail->qty,
-                'price'       => 'Rp ' . number_format($detail->amount, 0, ',', '.'),
+                $no++,
+                $row->Branch?->name,
+                $date,
+                $detail->Product->name,
+                $detail->qty,
+                $row->subtotal,
+                $row->Discount?->percentage ? $row->Discount?->percentage . '%' : '0%',
+                'Rp ' . number_format($row->total, 0, ',', '.'),
             ];
         }
 
@@ -73,10 +89,10 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->mergeCells('A1:E1');
-        $sheet->mergeCells('A2:E2');
+        $sheet->mergeCells('A1:H1');
+        $sheet->mergeCells('A2:H2');
 
-        $sheet->getStyle('A1:E1')->applyFromArray([
+        $sheet->getStyle('A1:H1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'size' => 16,
@@ -87,7 +103,7 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
             ],
         ]);
 
-        $sheet->getStyle('A2:E2')->applyFromArray([
+        $sheet->getStyle('A2:H2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'size' => 12,
@@ -98,7 +114,7 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
             ],
         ]);
 
-        $sheet->getStyle('A4:E4')->applyFromArray([
+        $sheet->getStyle('A4:H4')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'size' => 12,
@@ -120,17 +136,20 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
         ]);
 
         $sheet->getColumnDimension('A')->setWidth(5);
-        $sheet->getColumnDimension('B')->setWidth(20);
+        $sheet->getColumnDimension('B')->setWidth(30);
         $sheet->getColumnDimension('C')->setWidth(30);
-        $sheet->getColumnDimension('D')->setWidth(15);
-        $sheet->getColumnDimension('E')->setWidth(20);
+        $sheet->getColumnDimension('D')->setWidth(30);
+        $sheet->getColumnDimension('E')->setWidth(15);
+        $sheet->getColumnDimension('F')->setWidth(30);
+        $sheet->getColumnDimension('G')->setWidth(15);
+        $sheet->getColumnDimension('H')->setWidth(30);
 
         $highestRow = $sheet->getHighestRow();
 
-        $sheet->setCellValue('D' . ($highestRow + 1), 'Total Keseluruhan');
-        $sheet->setCellValue('E' . ($highestRow + 1), 'Rp ' . number_format($this->totalSum, 0, ',', '.'));
+        $sheet->setCellValue('G' . ($highestRow + 1), 'Total Keseluruhan');
+        $sheet->setCellValue('H' . ($highestRow + 1), 'Rp ' . number_format($this->totalSum, 0, ',', '.'));
 
-        $sheet->getStyle('D' . ($highestRow + 1) . ':E' . ($highestRow + 1))->applyFromArray([
+        $sheet->getStyle('G' . ($highestRow + 1) . ':H' . ($highestRow + 1))->applyFromArray([
             'font' => [
                 'bold' => true,
             ],
@@ -151,14 +170,31 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
         ]);
         
         // QTY Text Center
-        $sheet->getStyle('D5:D' . $highestRow)->applyFromArray([
+        $sheet->getStyle('E5:E' . $highestRow)->applyFromArray([
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
             ],
         ]);
 
-        $sheet->getStyle('A5:E' . $highestRow)->applyFromArray([
+        // QTY Text Center
+        $sheet->getStyle('G5:G' . $highestRow)->applyFromArray([
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+
+        // Format Subtotal Text Right
+        $sheet->getStyle('F5:F' . ($highestRow + 1))->applyFromArray([
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+
+        // Diskon Text Center
+        $sheet->getStyle('A5:H' . $highestRow)->applyFromArray([
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -168,7 +204,7 @@ class ExportReport implements FromCollection, WithHeadings, WithStyles, WithMapp
         ]);
 
         // Format Total Text Right
-        $sheet->getStyle('E5:E' . ($highestRow + 1))->applyFromArray([
+        $sheet->getStyle('H5:H' . ($highestRow + 1))->applyFromArray([
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,

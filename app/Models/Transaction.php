@@ -55,4 +55,14 @@ class Transaction extends Model
     {
         return $this->belongsTo(Cart::class, 'cart_id');
     }
+
+    public function Branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
+
+    public function Discount()
+    {
+        return $this->belongsTo(Discount::class, 'discount_id');
+    }
 }

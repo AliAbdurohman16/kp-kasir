@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Branch;
 use Laravolt\Avatar\Facade as Avatar;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -28,26 +29,60 @@ class UserSeeder extends Seeder
         ])->assignRole('owner');
 
         // admin
-        $adminAvatar = $this->createAvatar('Admin');
+        $admins = [
+            [
+                'name' => 'Admin Cabang Pusat',
+                'email' => 'admin.pusat@gmail.com',
+                'branch_name' => 'Cabang Pusat',
+            ],
+            [
+                'name' => 'Admin Cabang Luragung',
+                'email' => 'admin.bendungan@gmail.com',
+                'branch_name' => 'Cabang Luragung',
+            ],
+        ];
 
-        $admin = User::create([
-            'avatar' => $adminAvatar,
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'email_verified_at' => now(),
-            'password' => bcrypt('1234567890'),
-        ])->assignRole('admin');
+        foreach ($admins as $adminData) {
+            $branch = Branch::where('name', $adminData['branch_name'])->first();
+            $adminAvatar = $this->createAvatar($adminData['name']);
+            $admin = User::create([
+                'avatar' => $adminAvatar,
+                'name' => $adminData['name'],
+                'email' => $adminData['email'],
+                'email_verified_at' => now(),
+                'password' => bcrypt('1234567890'),
+                'branch_id' => $branch ? $branch->id : null,
+            ]);
+            $admin->assignRole('admin');
+        }
 
         // kepala-toko
-        $kepalaTokoAvatar = $this->createAvatar('Kepala Toko');
+        $kepalaTokos = [
+            [
+                'name' => 'Kepala Toko Cabang Pusat',
+                'email' => 'kepalatoko.pusat@gmail.com',
+                'branch_name' => 'Cabang Pusat',
+            ],
+            [
+                'name' => 'Kepala Toko Cabang Luragung',
+                'email' => 'kepalatoko.bendungan@gmail.com',
+                'branch_name' => 'Cabang Luragung',
+            ],
+        ];
 
-        $kepalaToko = User::create([
-            'avatar' => $kepalaTokoAvatar,
-            'name' => 'Kepala Toko',
-            'email' => 'kepalatoko@gmail.com',
-            'email_verified_at' => now(),
-            'password' => bcrypt('1234567890'),
-        ])->assignRole('kepala-toko');
+        foreach ($kepalaTokos as $kepalaTokoData) {
+            $branch = Branch::where('name', $kepalaTokoData['branch_name'])->first();
+            $kepalaTokoAvatar = $this->createAvatar($kepalaTokoData['name']);
+            $kepalaToko = User::create([
+                'avatar' => $kepalaTokoAvatar,
+                'name' => $kepalaTokoData['name'],
+                'email' => $kepalaTokoData['email'],
+                'email_verified_at' => now(),
+                'password' => bcrypt('1234567890'),
+                'branch_id' => $branch ? $branch->id : null,
+            ]);
+            $kepalaToko->assignRole('kepala-toko');
+        }
     }
 
     protected function createAvatar($name)

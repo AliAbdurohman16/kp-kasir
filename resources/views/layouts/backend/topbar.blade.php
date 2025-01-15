@@ -3,7 +3,7 @@
     <div class="row align-items-center justify-content-between">
         <div class="col-auto">
             <div class="d-flex flex-wrap align-items-center gap-4">
-                <button type="button" class="sidebar-toggle">
+                <button type="button" class="sidebar-toggle {{ request()->is('cashier*') ? 'active' : '' }}">
                     <iconify-icon icon="heroicons:bars-3-solid" class="icon text-2xl non-active"></iconify-icon>
                     <iconify-icon icon="iconoir:arrow-right" class="icon text-2xl active"></iconify-icon>
                 </button>
@@ -22,7 +22,7 @@
                         <div class="py-12 px-16 radius-8 bg-primary-50 mb-16 d-flex align-items-center justify-content-between gap-2">
                             <div>
                                 <h6 class="text-lg text-primary-light fw-semibold mb-2">{{ Auth::user()->name }}</h6>
-                                <span class="text-secondary-light fw-medium text-sm">{{ Auth::user()->hasRole('kepala-toko') ? 'Kepala Toko' : (Auth::user()->hasRole('admin') ? 'Admin' : 'Owner') }}</span>
+                                <span class="text-secondary-light fw-medium text-sm">{{ Auth::user()->hasRole('kepala-toko') ? 'Kepala Toko - ' . Auth::user()->Branch->name : (Auth::user()->hasRole('admin') ? 'Admin - ' . Auth::user()->Branch->name : 'Owner') }}</span>
                             </div>
                             <button type="button" class="hover-text-danger">
                                 <iconify-icon icon="radix-icons:cross-1" class="icon text-xl"></iconify-icon>

@@ -1,4 +1,4 @@
-<aside class="sidebar">
+<aside class="sidebar {{ request()->is('cashier*') ? 'active' : '' }}">
     <button type="button" class="sidebar-close-btn">
         <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
     </button>
@@ -29,6 +29,18 @@
                 <a href="{{ route('log-activities') }}">
                     <iconify-icon icon="mage:clock" class="menu-icon"></iconify-icon>
                     <span>Log Aktivitas</span>
+                </a>
+            </li>
+            <li class="{{ request()->is('branches*') ? 'active-page' : '' }}">
+                <a href="{{ route('branches.index') }}">
+                    <iconify-icon icon="solar:shop-2-outline" class="menu-icon"></iconify-icon>
+                    <span>Cabang Toko</span>
+                </a>
+            </li>
+            <li class="{{ request()->is('discounts*') ? 'active-page' : '' }}">
+                <a href="{{ route('discounts.index') }}">
+                    <iconify-icon icon="hugeicons:discount" class="menu-icon"></iconify-icon>
+                    <span>Data Diskon</span>
                 </a>
             </li>
             @endif

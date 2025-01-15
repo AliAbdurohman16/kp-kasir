@@ -17,6 +17,11 @@ return new class extends Migration
             $table->foreign('cashier_id')->references('id')->on('users')->onDelete('cascade');
             $table->uuid('cart_id')->index();
             $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');
+            $table->uuid('branch_id')->index()->nullable();
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            $table->uuid('discount_id')->index()->nullable();
+            $table->foreign('discount_id')->references('id')->on('discounts')->onDelete('cascade');
+            $table->decimal('subtotal', 10, 2);
             $table->decimal('total', 10, 2);
             $table->decimal('money', 10, 2);
             $table->decimal('change_money', 10, 2);

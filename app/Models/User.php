@@ -104,4 +104,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class, 'user_id');
     }
+
+    public function Branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
 }

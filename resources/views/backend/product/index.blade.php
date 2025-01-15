@@ -38,6 +38,8 @@
                         <th>Nama</th>
                         <th>Stok</th>
                         <th>Harga</th>
+                        <th>Toko</th>
+                        <th class="text-center">QR</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -51,6 +53,13 @@
                         <td>{{ $product->name }}</td>
                         <td>{{ $product->stock }}</td>
                         <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                        <td>{{ $product->Branch?->name }}</td>
+                        <td>
+                            <div class="d-flex flex-column align-items-center justify-content-center text-center">
+                                {!! QrCode::size(70)->generate($product->id) !!}
+                                <a href="{{ route('products.print', $product) }}" target="_blank" class="btn btn-sm btn-primary" style="margin-top: 10px">Print QR</a>
+                            </div>
+                        </td>
                         <td>
                             <a href="{{ route('products.edit', $product) }}" class="btn btn-success mb-2"><iconify-icon icon="ic:outline-edit"></iconify-icon></a>
                             @if (request()->is('products'))

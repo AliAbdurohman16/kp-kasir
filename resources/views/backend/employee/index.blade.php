@@ -35,6 +35,7 @@
                         <th>Foto</th>
                         <th>Nama</th>
                         <th>Email</th>
+                        <th>Toko</th>
                         <th>Role</th>
                         <th>Aksi</th>
                     </tr>
@@ -50,6 +51,7 @@
                                 </span><span class="package-name">{{ $employee->name }}</span>
                             </td>
                             <td>{{ $employee->email }}</td>
+                            <td>{{ $employee->Branch?->name }}</td>
                             <td>{{ ucwords(implode(', ', $employee->roles->pluck('name')->toArray())) }}</td>
                             <td>
                                 <a href="{{ route('employees.edit', $employee) }}" class="btn btn-success mb-2"><iconify-icon icon="ic:outline-edit"></iconify-icon></a>

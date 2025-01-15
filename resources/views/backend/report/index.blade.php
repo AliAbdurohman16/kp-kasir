@@ -49,6 +49,28 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Toko</label>
+
+                            @if (Auth::user()->hasRole('owner'))
+                                <select class="form-control @error('branch') is-invalid @enderror" name="branch">
+                                    <option value="" selected disabled>Pilih Toko</option>
+                                    <option value="Pilih Semua">Pilih Semua</option>
+                                    @foreach ($branches as $branch)
+                                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                    @endforeach
+                                </select>
+                            @else
+                                <input type="text" class="form-control" value="{{ Auth::user()->Branch?->name }}" readonly>
+                            @endif
+                            @error('branch')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
                     <div class="col-12 mb-3 mt-3">
                         <button class="btn btn-primary-600 w-100" type="submit">Simpan</button>
                     </div>

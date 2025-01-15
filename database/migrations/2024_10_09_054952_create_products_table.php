@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('stock');
             $table->decimal('price', 10, 2);
+            $table->uuid('branch_id')->index()->nullable();
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->timestamps();
         });
     }

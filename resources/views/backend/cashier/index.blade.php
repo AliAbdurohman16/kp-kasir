@@ -4,6 +4,11 @@
 
 @section('css')
 <link href="{{ asset('backend') }}/assets/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" >
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -22,54 +27,75 @@
 </div>
 
 <div class="row gy-4">
-    <div class="col-6">
+    <div class="col-7">
         <div class="card">
             <div class="card-body">
-                <div class="container mt-3">
-                    <div class="icon-field">
-                        <span class="icon">
-                            <iconify-icon icon="f7:search"></iconify-icon>
-                        </span>
-                        <input type="text" id="search" class="form-control" placeholder="Cari Produk...">
+                <div class="list-product">
+                    <div class="container mt-3">
+                        <div class="icon-field">
+                            <span class="icon">
+                                <iconify-icon icon="f7:search"></iconify-icon>
+                            </span>
+                            <input type="text" id="search" class="form-control" placeholder="Cari Produk...">
+                        </div>
+                    </div>
+                    <div class="table-responsive mt-3" style="height: 732px !important; overflow-y: auto;">
+                        <table class="table basic-table mb-0">
+                            <tbody>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Item</th>
+                                        <th scope="col" class="text-center">Stok</th>
+                                        <th scope="col">Harga </th>
+                                        <th scope="col" class="text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                @foreach ($products as $product)     
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ asset('storage/products/' . $product->image) }}" width="60px" alt="image" class="flex-shrink-0 me-12 radius-2 me-12">
+                                            <div class="flex-grow-1">
+                                                <h6 class="text-md mb-0 fw-normal">{{ $product->name }}</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $product->stock }} <br>
+                                        @if ($product->stock == 0)
+                                            <small class="text-danger">Stok kosong!</small>
+                                        @endif
+                                    </td>
+                                    <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                                    <td class="text-center">
+                                        <span class="btn btn-primary btn-sm btn-select" data-id="{{ $product->id }}">Pilih</span>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="table-responsive mt-3" style="height: 450px !important; overflow-y: auto;">
-                    <table class="table basic-table mb-0">
-                        <tbody>
-                            @foreach ($products as $product)     
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="{{ asset('storage/products/' . $product->image) }}" width="70px" alt="image" class="flex-shrink-0 me-12 radius-2 me-12">
-                                        <div class="flex-grow-1">
-                                            <h6 class="text-md mb-0 fw-normal">{{ $product->name }}</h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                                <td class="text-center">
-                                    <span class="btn btn-success btn-select" data-id="{{ $product->id }}"><iconify-icon icon="ep:select"></iconify-icon></span>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="scan hidden" style="height: 809px !important;">
+                    <div id="reader" width="600px"></div>
+                    <input type="hidden" name="product_id" id="productId">
+                    <button class="btn btn-danger w-100 mt-2" id="btn-stop">List Produk</button>
                 </div>
             </div>
         </div><!-- card end -->
     </div>
 
-    <div class="col-6">
+    <div class="col-5">
         <div class="card">
             <div class="card-body">
-                <div class="table-responsive mt-3" style="height: 258px !important; overflow-y: auto;">
+                <div class="table-responsive mt-3" style="height: 358px !important; overflow-y: auto;">
                     <input type="hidden" name="cart_id" value="{{ $cart->id ?? '' }}">
                     <table class="table striped-table mb-0" id="cart">
                         <thead>
                             <tr>
                                 <th scope="col">Item</th>
-                                <th scope="col">Qty</th>
-                                <th scope="col">Harga </th>
+                                <th scope="col" class="text-center">Qty</th>
+                                <th scope="col">Total </th>
                                 <th scope="col" class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -80,13 +106,13 @@
                                 <tr class="cart-row" data-id="{{ $detail->cart_id }}" data-amount="{{ $detail->amount }}">
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <img src="{{ asset('storage/products/' . $detail->Product->image) }}" width="70px" alt="image" class="flex-shrink-0 me-12 radius-2 me-12">
+                                            <img src="{{ asset('storage/products/' . $detail->Product->image) }}" width="60px" alt="image" class="flex-shrink-0 me-12 radius-2 me-12">
                                             <div class="flex-grow-1">
                                                 <h6 class="text-md mb-0 fw-normal">{{ $detail->Product->name }}</h6>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{ $detail->qty }}</td>
+                                    <td class="text-center">{{ $detail->qty }}</td>
                                     <td>Rp {{ number_format($detail->amount, 0, ',', '.') }}</td>
                                     <td class="text-center">
                                         <span class="btn btn-sm btn-danger btn-delete" data-id="{{ $detail->id }}"><iconify-icon icon="ep:close-bold"></iconify-icon></span>
@@ -102,6 +128,23 @@
                     <div class="table-responsive">
                         <table class="table basic-table mb-0">
                             <tr>
+                                <td class="fw-bold">Subtotal</td>
+                                <td class="fw-bold" id="subtotal">Rp 0</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Diskon</td>
+                                <td>
+                                    <select class="form-control" name="discount" id="discount">
+                                        <option value="" selected disabled>Pilih Diskon</option>
+                                        @foreach ($discounts as $discount)
+                                            <option value="{{ $discount->id }}" data-percentage="{{ $discount->percentage }}">
+                                                Diskon {{ $discount->percentage . ' - ' . $discount->name}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td class="fw-bold">Total</td>
                                 <td class="fw-bold" id="total">Rp 0</td>
                             </tr>
@@ -116,7 +159,8 @@
                         </table>
                     </div>
 
-                    <button class="btn btn-primary w-100 mt-3" id="btn-pay">Bayar</button>
+                    <button class="btn btn-primary w-100 mt-3" id="btn-scan">Scan</button>
+                    <button class="btn btn-success w-100 mt-3" id="btn-pay">Bayar</button>
                 </div>
             </div>
         </div><!-- card end -->
@@ -127,8 +171,103 @@
 @section('js')
 <script src="{{ asset('backend') }}/assets/plugins/autoNumeric/autoNumeric.min.js"></script>
 <script src="{{ asset('backend') }}/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
     $(document).ready(function() {
+         // Scan Qr
+        function onScanSuccess(decodedText, decodedResult) {
+            $('#productId').val(decodedText);
+            let productId = decodedText;
+            html5QrcodeScanner.clear().then(() => {
+                $.ajax({
+                    url: "cashier/select/" + productId,
+                    type: 'POST',
+                    data: {
+                        "id": productId,
+                        "_token": $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    success: function(response) {
+                        if (response.message) {
+                            swal.fire({
+                                icon: "error",
+                                title: "Gagal",
+                                text: response.message,
+                            });
+                        } else {
+                            $(".scan").addClass("hidden");
+                            $(".list-product").removeClass("hidden");
+
+                            var newCartRows = '';
+
+                            $.each(response.cart.cart_details, function(index, cart_detail) {
+
+                                const price = parseFloat(cart_detail.amount);
+                                const formattedPrice = price.toFixed(0);
+
+                                newCartRows += `
+                                    <tr class="cart-row">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="/storage/products/${cart_detail.product.image}" width="60px" alt="image" class="flex-shrink-0 me-12 radius-2 me-12">
+                                                <div class="flex-grow-1">
+                                                    <h6 class="text-md mb-0 fw-normal">${cart_detail.product.name}</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">${cart_detail.qty}</td>
+                                        <td>Rp ${parseInt(formattedPrice).toLocaleString('id-ID')}</td>
+                                        <td class="text-center">
+                                            <span class="btn btn-sm btn-danger btn-delete" data-id="${ cart_detail.id }"><iconify-icon icon="ep:close-bold"></iconify-icon></span>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+
+                            $("#cart tbody").html(newCartRows);
+                            payInput.clear();
+                            $("#changeMoney").text('Rp 0');
+                            $('input[name="cart_id"]').val(response.cart.id);
+
+                            calculateTotal(response.cart.cart_details);
+                        }
+                    },
+                });
+
+                $(".scan").addClass("hidden");
+                $(".list-product").removeClass("hidden");
+
+            }).catch((error) => {
+                console.error("Failed to stop scanner.", error);
+            });
+        }
+    
+        function onScanFailure(error) {
+            // console.warn(`Code scan error = ${error}`);
+        }
+
+        html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader",
+            { fps: 10, qrbox: { width: 250, height: 250 } },
+            /* verbose= */ false
+        );
+
+        html5QrcodeScanner.clear();
+
+        $(document).on("click", "#btn-scan", function () {
+            $(".scan").removeClass("hidden");
+            $(".list-product").addClass("hidden");
+
+            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        });
+
+        $(document).on("click", "#btn-stop", function () {
+            $(".scan").addClass("hidden");
+            $(".list-product").removeClass("hidden");
+
+            html5QrcodeScanner.clear();
+        });
+        // end scan qr
+
         let totalAmount = 0;
 
         $(".cart-row").each(function() {
@@ -138,7 +277,9 @@
 
         const formattedTotal = totalAmount.toFixed(0);
 
-        $("#total").text('Rp ' + parseInt(formattedTotal).toLocaleString('id-ID'));
+        $("#subtotal").text('Rp ' + parseInt(formattedTotal).toLocaleString('id-ID'));
+
+        calculateDiscount();
 
         $("#payInput").on("input", function() {
             const payment = $("#payInput").val().replace(/\./g, '').replace('Rp ', '').trim() || 0;
@@ -151,6 +292,22 @@
             $("#changeMoney").text('Rp ' + parseInt(change).toLocaleString('id-ID'));
         });
     });
+
+    function calculateDiscount() {
+        const selectedOption = $('#discount').find(":selected"); // Opsi yang dipilih
+        const discountId = selectedOption.val(); // Ambil id diskon
+        const discountPercentage = parseFloat(selectedOption.data("percentage")) || 0; 
+
+        const subtotal = parseFloat($("#subtotal").text().replace('Rp ', '').replace(/\./g, '').trim());
+    
+        const discountAmount = (subtotal * discountPercentage) / 100;
+        const discountedTotal = subtotal - discountAmount;
+    
+        $("#total").text('Rp ' + parseInt(discountedTotal).toLocaleString('id-ID'));
+    }
+
+    $("#discount").on("change", calculateDiscount);
+
 
     const payInput = new AutoNumeric('#payInput', {
         currencySymbol : 'Rp ',
@@ -183,6 +340,7 @@
 
         const formattedTotal = totalAmount.toFixed(0);
 
+        $("#subtotal").text('Rp ' + parseInt(formattedTotal).toLocaleString('id-ID'));
         $("#total").text('Rp ' + parseInt(formattedTotal).toLocaleString('id-ID'));
     }
 
@@ -215,13 +373,13 @@
                             <tr class="cart-row">
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="/storage/products/${cart_detail.product.image}" width="70px" alt="image" class="flex-shrink-0 me-12 radius-2 me-12">
+                                        <img src="/storage/products/${cart_detail.product.image}" width="60px" alt="image" class="flex-shrink-0 me-12 radius-2 me-12">
                                         <div class="flex-grow-1">
                                             <h6 class="text-md mb-0 fw-normal">${cart_detail.product.name}</h6>
                                         </div>
                                     </div>
                                 </td>
-                                <td>${cart_detail.qty}</td>
+                                <td class="text-center">${cart_detail.qty}</td>
                                 <td>Rp ${parseInt(formattedPrice).toLocaleString('id-ID')}</td>
                                 <td class="text-center">
                                     <span class="btn btn-sm btn-danger btn-delete" data-id="${ cart_detail.id }"><iconify-icon icon="ep:close-bold"></iconify-icon></span>
@@ -272,13 +430,13 @@
                                 <tr class="cart-row">
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <img src="/storage/products/${cart_detail.product.image}" width="70px" alt="image" class="flex-shrink-0 me-12 radius-2 me-12">
+                                            <img src="/storage/products/${cart_detail.product.image}" width="60px" alt="image" class="flex-shrink-0 me-12 radius-2 me-12">
                                             <div class="flex-grow-1">
                                                 <h6 class="text-md mb-0 fw-normal">${cart_detail.product.name}</h6>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>${cart_detail.qty}</td>
+                                    <td class="text-center">${cart_detail.qty}</td>
                                     <td>Rp ${parseInt(formattedPrice).toLocaleString('id-ID')}</td>
                                     <td class="text-center">
                                         <span class="btn btn-sm btn-danger btn-delete" data-id="${ cart_detail.id }"><iconify-icon icon="ep:close-bold"></iconify-icon></span>
@@ -301,18 +459,22 @@
 
     $(document).on("click", "#btn-pay", function () {
         const cartId = $('input[name="cart_id"]').val();
+        const subtotal = parseFloat($("#subtotal").text().replace('Rp ', '').replace(/\./g, '').trim());
         const total = parseFloat($("#total").text().replace('Rp ', '').replace(/\./g, '').trim());
         const money = $("#payInput").val().replace(/\./g, '').replace('Rp ', '').trim() || 0;
         const changeMoney = parseFloat($("#changeMoney").text().replace('Rp ', '').replace(/\./g, '').trim());
+        const discountId = $('#discount').val();
 
         $.ajax({
             url: "cashier",
             type: 'POST',
             data: {
                 "cart_id": cartId,
+                "subtotal": subtotal,
                 "total": total,
                 "money": money,
                 "change_money": changeMoney,
+                "discount_id": discountId,
                 "_token": $('meta[name="csrf-token"]').attr('content'),
             },
             success: function(response) {

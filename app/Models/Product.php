@@ -50,4 +50,9 @@ class Product extends Model
     {
         return $this->hasMany(Cart::class, 'product_id');
     }
+
+    public function Branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
 }

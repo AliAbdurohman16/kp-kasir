@@ -123,8 +123,8 @@
     <div class="receipt">
         <div class="header">
             <p>Sinar Utama Furniture</p>
-            <p>Jl. Raya Luragung - Kuningan Pusat Pertokoan Fajar</p>
-            <p>Telp: (021) 12345678</p>
+            <p>{{ $transaction->Branch?->address }}</p>
+            <p>Telp: {{ $transaction->Branch?->telephone }}</p>
             <p>{{ date('d-m-Y H:i:s') }}</p>
         </div>
 
@@ -161,6 +161,16 @@
 
         <div class="total">
             <table>
+                <tr>
+                    <td>Subtotal</td>
+                    <td>:</td>
+                    <td style="text-align: right;">{{ number_format($transaction->subtotal, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td>Diskon</td>
+                    <td>:</td>
+                    <td style="text-align: right;">{{ $transaction->Discount?->percentage ? $transaction->Discount?->percentage . '%' : '0%' }}</td>
+                </tr>
                 <tr>
                     <td>Total</td>
                     <td>:</td>

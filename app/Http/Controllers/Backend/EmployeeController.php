@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Branch;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Laravolt\Avatar\Facade as Avatar;
@@ -31,7 +32,10 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        $data['roles'] = Role::where('name', '!=', 'user')->get();
+        $data = [
+            'roles' => Role::where('name', '!=', 'user')->get(),
+            'branches' => Branch::orderBy('created_at', 'asc')->get()
+        ];
 
         return view('backend.employee.create', $data);
     }
@@ -46,6 +50,7 @@ class EmployeeController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed',
             'role' => 'required',
+            'branch_id' => 'required',
         ]);
 
         unset($data['role']);
@@ -84,6 +89,7 @@ class EmployeeController extends Controller
         $data = [
             'employee' => User::find($id),
             'roles' => Role::where('name', '!=', 'user')->get(),
+            'branches' => Branch::orderBy('created_at', 'asc')->get()
         ];
 
         return view('backend.employee.edit', $data);
@@ -100,6 +106,7 @@ class EmployeeController extends Controller
             'name' => 'required',
             'email' => $employee->email === $request->email ? 'required|email' : 'required|email|unique:users,email',
             'password' => $request->password ? 'required|min:8|confirmed' : '',
+            'branch_id' => 'required',
         ]);
 
         $isNameChanged = $employee->name !== $request->name;

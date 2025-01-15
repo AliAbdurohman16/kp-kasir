@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Cart;
+use App\Models\Discount;
 use App\Models\CartDetail;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
@@ -17,9 +18,16 @@ class CashierController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->hasRole('owner')) {
+            $products = Product::orderBy('created_at', 'desc')->get();
+        } else {
+            $products = Product::where('branch_id', Auth::user()->branch_id)->orderBy('created_at', 'desc')->get();
+        }
+
         $data = [
-            'products' => Product::orderBy('created_at', 'desc')->get(),
+            'products' => $products,
             'cart' => Cart::where('status', 'pending')->orderBy('created_at', 'desc')->first(),
+            'discounts' => Discount::where('status', 'Aktif')->orderBy('created_at', 'asc')->get(),
         ];
 
         return view('backend.cashier.index', $data);
@@ -32,7 +40,9 @@ class CashierController extends Controller
     {
         $product = Product::find($id);
 
-        if ($product->stock == 0) {
+        if ($product->id != $id) {
+            return response()->json(['message' => 'Produk tidak ada!']);
+        } else if ($product->stock == 0) {
             return response()->json(['message' => 'Stok produk kosong!']);
         }
 
@@ -69,9 +79,14 @@ class CashierController extends Controller
     public function store(Request $request)
     {
         $cart_id = $request->cart_id;
+        $subtotal = $request->subtotal;
         $total = $request->total;
         $money = $request->money;
         
+        if (!$subtotal) {
+            return response()->json(['error' => 'subtotal masih Rp 0!']);
+        }
+
         if (!$total) {
             return response()->json(['error' => 'Total masih Rp 0!']);
         }
@@ -83,6 +98,9 @@ class CashierController extends Controller
         $transaction = Transaction::create([
             'cashier_id' => Auth::user()->id,
             'cart_id' => $cart_id,
+            'branch_id' => Auth::user()->branch_id,
+            'discount_id' => $request->discount_id,
+            'subtotal' => $subtotal,
             'total' => $total,
             'money' => $money,
             'change_money' => $request->change_money,

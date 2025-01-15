@@ -69,6 +69,22 @@
                         </div>
                     </div>
                     <div class="col-sm-12">
+                        <label class="form-label">Toko</label>
+                        <div class="form-group">
+                            <select class="form-control @error('branch_id') is-invalid @enderror" name="branch_id">
+                                <option value="" selected disabled>Pilih Toko</option>
+                                @foreach ($branches as $branch)
+                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('branch_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
                         <div class="form-group">
                             <label class="form-label">Role</label>
                             <select class="form-control @error('role') is-invalid @enderror" id="role" name="role">
