@@ -12,7 +12,6 @@
         "laravel/ui": "^4.5",
         "laravolt/avatar": "^5.1",
         "maatwebsite/excel": "^3.1",
-        "midtrans/midtrans-php": "^2.6",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-activitylog": "^4.8",
         "spatie/laravel-permission": "^6.9"
