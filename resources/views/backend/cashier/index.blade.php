@@ -197,7 +197,7 @@
                             $(".scan").addClass("hidden");
                             $(".list-product").removeClass("hidden");
 
-                            var newCartRows = '';
+                            let newCartRows = '';
 
                             $.each(response.cart.cart_details, function(index, cart_detail) {
 
@@ -316,17 +316,21 @@
         decimalPlaces: 0,
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchInput = document.getElementById('search');
-        const tableRows = document.querySelectorAll('.basic-table tbody tr');
+    $(document).ready(function() {
+        const $searchInput = $('#search');
+        const $tableRows = $('.basic-table tbody tr');
 
-        searchInput.addEventListener('input', function () {
-            const searchTerm = searchInput.value.toLowerCase();
+        $searchInput.on('input', function() {
+            const searchTerm = $(this).val().toLowerCase();
 
-            tableRows.forEach(row => {
-                const productName = row.querySelector('h6').textContent.toLowerCase();
+            $tableRows.each(function() {
+                const productName = $(this).find('h6').text().toLowerCase();
 
-                row.style.display = productName.includes(searchTerm) ? '' : 'none';
+                if (productName.includes(searchTerm)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
             });
         });
     });
@@ -345,7 +349,7 @@
     }
 
     $(document).on("click", ".btn-select", function () {
-        var id = $(this).data("id");
+        let id = $(this).data("id");
 
         $.ajax({
             url: "cashier/select/" + id,
@@ -362,7 +366,7 @@
                         text: response.message,
                     });
                 } else {
-                    var newCartRows = '';
+                    let newCartRows = '';
 
                     $.each(response.cart.cart_details, function(index, cart_detail) {
 
@@ -400,7 +404,7 @@
     });
 
     $(document).on("click", ".btn-delete", function() {
-        var id = $(this).data("id");
+        let id = $(this).data("id");
         Swal.fire({
             title: 'Hapus',
             text: "Apakah anda yakin ingin menghapus?",
@@ -419,7 +423,7 @@
                         "_token": $('meta[name="csrf-token"]').attr('content'),
                     },
                     success: function(response) {
-                        var newCartRows = '';
+                        let newCartRows = '';
                         
                         $.each(response.cart.cart_details, function(index, cart_detail) {
 
